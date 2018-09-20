@@ -10,18 +10,21 @@ $postvalida = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $DS = DIRECTORY_SEPARATOR;
     $dir_subida = __DIR__.$DS.'img'.$DS;
-    if(!isset($_POST['cotinuar'])){
+    $postvalida = false;
+
+    if( ($_FILES['imagen']['name']!='') ){
         $fichero_subido = $dir_subida . basename($_FILES['imagen']['name']);
         $postvalida = false;
         if (move_uploaded_file($_FILES['imagen']['tmp_name'], $fichero_subido)) {
             $postvalida = true;
         }
-    }else{
-        $fichero_subido = $_POST['cotinuar'];
+    }elseif ( isset($_POST['continuar']) ) {
+        $fichero_subido = $_POST['continuar'];
         $postvalida = true;
     }
+
     if($postvalida){
-        $tw = new \Ast\ImageTypewriter\ImageTypewriter();
+        $tw = new \Ast\ImageTypewriter\ImageTypewriter(true);
         $tw->createAndSaveThumb($fichero_subido,$dir_subida.'temp.png',$_POST['caracteres'],$_POST['filtro'],$_POST['indice']);
     }
 
@@ -42,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             margin: 0px; padding: 0px;
             font-size: 1rem;
             display: block;
-            height: 7px;
+            height: 9px;
         }
         .renglon.maker{
             font-size: 1.5rem;
@@ -52,8 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         .char
         {
             font-family:'Conv_rm_typerighter_medium',Sans-Serif;
-            font-size: 1rem;
-            width: 7px;
+            font-size: 25px;
+            width: 10px;
             display: inline-block;
             text-align: center;
         }
@@ -97,8 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 <form method="POST" enctype="multipart/form-data" >
     <?php if ($postvalida){?>
         <div class="row">
-            <label>Foto</label>
-            <input type="text" name="cotinuar" value="<?php echo $fichero_subido; ?>" />
+            <input type="hidden" name="continuar" value="<?php echo $fichero_subido; ?>" />
         </div>
     <?php }?>
 
