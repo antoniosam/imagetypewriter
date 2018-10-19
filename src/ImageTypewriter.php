@@ -50,21 +50,17 @@ class ImageTypewriter
         'Z',
         '_a',
         '_b',
-        '_b',
+        '_c',
         '_d',
         '_e',
         '_f',
-        '_f',
         '_h',
         '_i',
-        '_j',
         '_k',
         '_l',
         '_m',
         '_n',
         '_o',
-        '_p',
-        '_q',
         '_r',
         '_s',
         '_t',
@@ -72,55 +68,50 @@ class ImageTypewriter
         '_v',
         '_w',
         '_x',
-        '_y',
         '_z',
-        '2',
+        "2",
         '3',
         '4',
         '5',
         '6',
         '7',
-        '8',
+        "8",
         '9',
-        '_=',
-        '_+',
         '_-',
-        '_¿',
-        '_!',
-        '_¡',
-        '_(',
-        '_)',
-        //'_[',
-        //'_]',
-        //'_{',
-        //'_}',
-        '_#',
-        '_$',
-        '_%',
-        '_&',
+        '_semi',//;
+        '_excl',//!
+        '_quest',//?
+        '_apos',//'
+        '_quot',//"
+        '_lpar',//(
+        '_rpar',//)
+        '_slash',//  /
+        '_amp',// &
+        '_num',// #
+        '_percnt',// %
+        '_plus',//+,
+        '_equal',//=
+        '_currency',// $
         '_space'
     ];
 
-    private $adjust = [
-        'W' => ['size' => 26, 'x' => 1, 'y' => 12],
-        '_!' => ['size' => 27, 'x' => 7, 'y' => 12],
-        '_¡' => ['size' => 27, 'x' => 7, 'y' => 11],
-        '_(' => ['size' => 27, 'x' => 5, 'y' => 12],
-        '_)' => ['size' => 27, 'x' => 6, 'y' => 12],
-        '_[' => ['size' => 27, 'x' => 6, 'y' => 14],
-        '_]' => ['size' => 27, 'x' => 6, 'y' => 14],
-        '_{' => ['size' => 27, 'x' => 6, 'y' => 12],
-        '_}' => ['size' => 27, 'x' => 6, 'y' => 12],
-        '_&' => ['size' => 27, 'x' => 4, 'y' => 12],
-        '_%' => ['size' => 27, 'x' => 5, 'y' => 12],
-        '_#' => ['size' => 27, 'x' => 4, 'y' => 12],
-        '_+' => ['size' => 27, 'x' => 5, 'y' => 12],
-        '_=' => ['size' => 27, 'x' => 5, 'y' => 12],
-        '_-' => ['size' => 27, 'x' => 5, 'y' => 12],
-        '_i' => ['size' => 27, 'x' => 5, 'y' => 12],
-        '_j' => ['size' => 27, 'x' => 5, 'y' => 12],
-        '_l' => ['size' => 27, 'x' => 5, 'y' => 12],
-    ];
+    private $character_biggers = ['_lpar','_rpar','_slash','_num','_percnt','3','9'];
+
+    private $character_makers = ['_semi'=>';',
+        '_excl'=>'!',
+        '_quest'=>'?',
+        '_apos'=>"'",
+        '_quot'=>'"',
+        '_lpar'=>'(',
+        '_rpar'=>')',
+        '_slash'=>'/',
+        '_amp'=>'&',
+        '_num'=>'#',
+        '_percnt'=>'%',
+        '_plus'=>'+',
+        '_equal'=>'=',
+        '_currency'=>'$',
+        '_space'=>'space '];
 
 
     const FILTER_NONE = 1;
@@ -129,10 +120,11 @@ class ImageTypewriter
     const FILTER_MEAN_REMOVAL = 4;
     const FILTER_EDGEDETECT = 5;
 
-    private $forcemap = false;
-    function __construct($forcemap = false)
+    private $includelarge = false;
+
+    function __construct($includelarge = true)
     {
-        $this->forcemap = $forcemap;
+        $this->includelarge = $includelarge;
     }
 
     public function createAndSaveThumb($filename,$destino,$width,$filter = self::FILTER_NONE,$indice = null){
@@ -183,7 +175,7 @@ class ImageTypewriter
             foreach ($this->mapa as $renglon) {
                 $html .= '<p class="renglon">';
                 foreach ($renglon as $letra) {
-                    $html .= '<span class="char">' . (($letra == 'space')?'&nbsp;':$letra) . '</span>';
+                    $html .= '<span class="singlechar char'.$letra.'"></span>';
                 }
                 $html .= '</p>';
             }
@@ -200,7 +192,8 @@ class ImageTypewriter
                 $html .= '<p class="renglon maker">';
                 $anterior = '';
                 $cont = 0;
-                foreach ($renglon as $letra) {
+                foreach ($renglon as $character) {
+                    $letra = isset($this->character_makers[$character])?$this->character_makers[$character]:str_replace('_','',$character);
                     if ($anterior == '') {
                         $anterior = $letra;
                         $cont = 1;
@@ -290,33 +283,84 @@ class ImageTypewriter
 
         }
         $paleta[$i] = $caracter;
+
+        $mapabase = $this->getMapaBase(true);
+        $claves = array_keys($mapabase);
+        $index = [];
+        $caracter = 'M';
+        $inicio = $mapabase[$caracter];
+        $fin  = 244;
+        $count = 0;
+        for ($i =1; $i < count($claves);$i++){
+            $count = $inicio - $mapabase[$claves[$i]];
+            $inicio = $mapabase[$claves[$i]];
+            $index[] = [$claves[$i],($count*-1)];
+        }
+        $DS = DIRECTORY_SEPARATOR;
+        $filename = __DIR__ . $DS . 'files' . $DS . 'log_map.json';
+        file_put_contents($filename, json_encode($index));//for logs
+        /*for($i = $inicio; $i<256;$i++){
+            if(isset($mapabase[$i])){
+
+            }
+            if(isset($index[$caracter])){
+                $index[$caracter]++;
+            }else{
+                $index[$caracter] = 1;
+            }
+        }
+
+        $disponibles = count($mapabase);
+        $densidad = $max - $min;*/
+
+
         return $paleta;
     }
 
-    private function getMapaBase()
+    private function getMapaBase($dev = false)
     {
         $DS = DIRECTORY_SEPARATOR;
-        $filename = __DIR__ . $DS . 'files' . $DS . 'basemapa.json';
-        if (file_exists($filename) && $this->forcemap == false) {
-            $mapabase = json_decode(file_get_contents($filename), true);
-        } else {
-            $resouces = $this->createStockImageBase();
-            $base = [];
-            foreach ($resouces as $caracter => $resouce) {
-                $base[$caracter] = ColorImage::getInfo($resouce)->getAvgPixel();
-            }
-            unset($resouces);
-            asort($base);
-            $mapabase = [];
-            foreach ($base as $caracter => $pixel) {
-                $mapabase[] = str_replace('_','',$caracter);
-            }
-            file_put_contents($filename, json_encode($mapabase));
+        $filename = __DIR__ . $DS . 'files' . $DS . 'log_map.json';
+
+        $resouces = $this->getImageBase();
+        $base = [];
+        foreach ($resouces as $caracter => $resouce) {
+            $base[$caracter] = ColorImage::getInfo($resouce)->getAvgPixel();
         }
+        unset($resouces);
+        asort($base);
+        //file_put_contents($filename, json_encode($base));//for logs
+        if($dev){
+            return $base;
+        }
+        $mapabase = [];
+        foreach ($base as $caracter => $pixel) {
+            $mapabase[] = $caracter;
+        }
+        //file_put_contents($filename, json_encode($mapabase));//for logs
 
         return $mapabase;
     }
+    private function getImageBase(){
+        $DS = DIRECTORY_SEPARATOR;
+        $resources = [];
+        if($this->includelarge){
+            $temp = $this->universo;
+        }else{
+            $temp = [];
+            foreach ($this->universo as $character){
+                if(!in_array($character,$this->character_biggers)){
+                    $temp[] =  $character;
+                }
+            }
+        }
 
+        foreach ($temp as $caracter) {
+            $resources[$caracter] = imagecreatefromjpeg(__DIR__ . $DS . 'files' . $DS . 'letras' . $DS . $caracter . '.jpg');
+        }
+
+        return $resources;
+    }
     private function createStockImageBase($save = false)
     {
         $DS = DIRECTORY_SEPARATOR;

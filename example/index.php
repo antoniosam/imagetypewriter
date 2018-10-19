@@ -10,6 +10,9 @@ $postvalida = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $DS = DIRECTORY_SEPARATOR;
     $dir_subida = __DIR__.$DS.'img'.$DS;
+    if(!file_exists($dir_subida)){
+        mkdir($dir_subida,0777, true);
+    }
     $postvalida = false;
 
     if( ($_FILES['imagen']['name']!='') ){
@@ -24,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
 
     if($postvalida){
-        $tw = new \Ast\ImageTypewriter\ImageTypewriter(true);
+        $tw = new \Ast\ImageTypewriter\ImageTypewriter(false);
         $tw->createAndSaveThumb($fichero_subido,$dir_subida.'temp.png',$_POST['caracteres'],$_POST['filtro'],$_POST['indice']);
     }
 
@@ -45,13 +48,96 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             margin: 0px; padding: 0px;
             font-size: 1rem;
             display: block;
-            height: 9px;
+            height: 19px;
         }
         .renglon.maker{
             font-size: 1.5rem;
             height: 15px;
                 width: 220%;
         }
+        .singlechar{
+            width: 18px;
+            height: 20px;
+            display: inline-block;
+            background-size: 18px 20px;
+        }
+        .charA{background-image: url("../src/files/letras/A.jpg");}
+        .charB{background-image: url("../src/files/letras/B.jpg");}
+        .charC{background-image: url("../src/files/letras/C.jpg");}
+        .charD{background-image: url("../src/files/letras/D.jpg");}
+        .charE{background-image: url("../src/files/letras/E.jpg");}
+        .charF{background-image: url("../src/files/letras/F.jpg");}
+        .charG{background-image: url("../src/files/letras/G.jpg");}
+        .charH{background-image: url("../src/files/letras/H.jpg");}
+        .charI{background-image: url("../src/files/letras/I.jpg");}
+        .charJ{background-image: url("../src/files/letras/J.jpg");}
+        .charK{background-image: url("../src/files/letras/K.jpg");}
+        .charL{background-image: url("../src/files/letras/L.jpg");}
+        .charM{background-image: url("../src/files/letras/M.jpg");}
+        .charN{background-image: url("../src/files/letras/N.jpg");}
+        .charO{background-image: url("../src/files/letras/O.jpg");}
+        .charP{background-image: url("../src/files/letras/P.jpg");}
+        .charQ{background-image: url("../src/files/letras/Q.jpg");}
+        .charR{background-image: url("../src/files/letras/R.jpg");}
+        .charS{background-image: url("../src/files/letras/S.jpg");}
+        .charT{background-image: url("../src/files/letras/T.jpg");}
+        .charU{background-image: url("../src/files/letras/U.jpg");}
+        .charV{background-image: url("../src/files/letras/V.jpg");}
+        .charW{background-image: url("../src/files/letras/W.jpg");}
+        .charX{background-image: url("../src/files/letras/X.jpg");}
+        .charY{background-image: url("../src/files/letras/Y.jpg");}
+        .charZ{background-image: url("../src/files/letras/Z.jpg");}
+        .char2{background-image: url("../src/files/letras/2.jpg");}
+        .char3{background-image: url("../src/files/letras/3.jpg");}
+        .char4{background-image: url("../src/files/letras/4.jpg");}
+        .char5{background-image: url("../src/files/letras/5.jpg");}
+        .char6{background-image: url("../src/files/letras/6.jpg");}
+        .char7{background-image: url("../src/files/letras/7.jpg");}
+        .char8{background-image: url("../src/files/letras/8.jpg");}
+        .char9{background-image: url("../src/files/letras/9.jpg");}
+        .char_A{background-image: url("../src/files/letras/_A.jpg");}
+        .char_B{background-image: url("../src/files/letras/_B.jpg");}
+        .char_C{background-image: url("../src/files/letras/_C.jpg");}
+        .char_D{background-image: url("../src/files/letras/_D.jpg");}
+        .char_E{background-image: url("../src/files/letras/_E.jpg");}
+        .char_F{background-image: url("../src/files/letras/_F.jpg");}
+        .char_G{background-image: url("../src/files/letras/_G.jpg");}
+        .char_H{background-image: url("../src/files/letras/_H.jpg");}
+        .char_I{background-image: url("../src/files/letras/_I.jpg");}
+        .char_J{background-image: url("../src/files/letras/_J.jpg");}
+        .char_K{background-image: url("../src/files/letras/_K.jpg");}
+        .char_L{background-image: url("../src/files/letras/_L.jpg");}
+        .char_M{background-image: url("../src/files/letras/_M.jpg");}
+        .char_N{background-image: url("../src/files/letras/_N.jpg");}
+        .char_O{background-image: url("../src/files/letras/_O.jpg");}
+        .char_P{background-image: url("../src/files/letras/_P.jpg");}
+        .char_Q{background-image: url("../src/files/letras/_Q.jpg");}
+        .char_R{background-image: url("../src/files/letras/_R.jpg");}
+        .char_S{background-image: url("../src/files/letras/_S.jpg");}
+        .char_T{background-image: url("../src/files/letras/_T.jpg");}
+        .char_U{background-image: url("../src/files/letras/_U.jpg");}
+        .char_V{background-image: url("../src/files/letras/_V.jpg");}
+        .char_W{background-image: url("../src/files/letras/_W.jpg");}
+        .char_X{background-image: url("../src/files/letras/_X.jpg");}
+        .char_Y{background-image: url("../src/files/letras/_Y.jpg");}
+        .char_Z{background-image: url("../src/files/letras/_Z.jpg");}
+        .char_-{background-image: url("../src/files/letras/_-.jpg");}
+        .char_semi{background-image: url("../src/files/letras/_semi.jpg");}
+        .char_excl{background-image: url("../src/files/letras/_excl.jpg");}
+        .char_quest{background-image: url("../src/files/letras/_quest.jpg");}
+        .char_apos{background-image: url("../src/files/letras/_apos.jpg");}
+        .char_quot{background-image: url("../src/files/letras/_quot.jpg");}
+        .char_lpar{background-image: url("../src/files/letras/_lpar.jpg");}
+        .char_rpar{background-image: url("../src/files/letras/_rpar.jpg");}
+        .char_slash{background-image: url("../src/files/letras/_slash.jpg");}
+        .char_amp{background-image: url("../src/files/letras/_amp.jpg");}
+        .char_num{background-image: url("../src/files/letras/_num.jpg");}
+        .char_percnt{background-image: url("../src/files/letras/_percnt.jpg");}
+        .char_plus{background-image: url("../src/files/letras/_plus.jpg");}
+        .char_equal{background-image: url("../src/files/letras/_equal.jpg");}
+        .char_currency{background-image: url("../src/files/letras/_currency.jpg");}
+        .char_space{background-image: url("../src/files/letras/_space.jpg");}
+
         .char
         {
             font-family:'Conv_rm_typerighter_medium',Sans-Serif;
