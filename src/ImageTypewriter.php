@@ -121,10 +121,12 @@ class ImageTypewriter
     const FILTER_EDGEDETECT = 5;
 
     private $includelarge = false;
+    private $renewmap = false;
 
-    function __construct($includelarge = true)
+    function __construct($includelarge = true,$renuewmap=false)
     {
         $this->includelarge = $includelarge;
+        $this->renewmap = $renuewmap;
     }
 
     public function createAndSaveThumb($filename,$destino,$width,$filter = self::FILTER_NONE,$indice = null){
@@ -260,7 +262,7 @@ class ImageTypewriter
 
     private function getPalete($min, $max)
     {
-        $mapabase = $this->getMapaBase();
+        $mapabase = $this->getCharacterMaps();
         $disponibles = count($mapabase);
         $densidad = $max - $min;
         $interval = (int)floor($densidad / $disponibles);
@@ -284,40 +286,26 @@ class ImageTypewriter
         }
         $paleta[$i] = $caracter;
 
-        $mapabase = $this->getMapaBase(true);
-        $claves = array_keys($mapabase);
-        $index = [];
-        $caracter = 'M';
-        $inicio = $mapabase[$caracter];
-        $fin  = 244;
-        $count = 0;
-        for ($i =1; $i < count($claves);$i++){
-            $count = $inicio - $mapabase[$claves[$i]];
-            $inicio = $mapabase[$claves[$i]];
-            $index[] = [$claves[$i],($count*-1)];
-        }
-        $DS = DIRECTORY_SEPARATOR;
-        $filename = __DIR__ . $DS . 'files' . $DS . 'log_map.json';
-        file_put_contents($filename, json_encode($index));//for logs
-        /*for($i = $inicio; $i<256;$i++){
-            if(isset($mapabase[$i])){
-
-            }
-            if(isset($index[$caracter])){
-                $index[$caracter]++;
-            }else{
-                $index[$caracter] = 1;
-            }
-        }
-
-        $disponibles = count($mapabase);
-        $densidad = $max - $min;*/
-
-
         return $paleta;
     }
 
-    private function getMapaBase($dev = false)
+    public function getCharacterMaps(){
+        if($this->renewmap){
+            return  $this->generateMap();
+        }else{
+            return $this->getCustomMap();
+        }
+    }
+
+    private function getCustomMap()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $filename = __DIR__ . $DS . 'files' . $DS . 'custom_map.json';
+
+        return json_decode(file_get_contents($filename));
+    }
+
+    private function generateMap()
     {
         $DS = DIRECTORY_SEPARATOR;
         $filename = __DIR__ . $DS . 'files' . $DS . 'log_map.json';
@@ -329,18 +317,15 @@ class ImageTypewriter
         }
         unset($resouces);
         asort($base);
-        //file_put_contents($filename, json_encode($base));//for logs
-        if($dev){
-            return $base;
-        }
         $mapabase = [];
         foreach ($base as $caracter => $pixel) {
             $mapabase[] = $caracter;
         }
-        //file_put_contents($filename, json_encode($mapabase));//for logs
+        file_put_contents($filename, json_encode($mapabase));//for logs
 
         return $mapabase;
     }
+
     private function getImageBase(){
         $DS = DIRECTORY_SEPARATOR;
         $resources = [];

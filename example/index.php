@@ -37,29 +37,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 <head>
     <title> Image to Machine Letter</title>
     <style>
-        @font-face {
+        /*@font-face {
             font-family: 'Conv_rm_typerighter_medium';
             src: url('assets/fonts/rm_typerighter_medium.eot');
             src: local('☺'), url('assets/fonts/rm_typerighter_medium.woff') format('woff'), url('assets/fonts/rm_typerighter_medium.ttf') format('truetype'), url('assets/fonts/rm_typerighter_medium.svg') format('svg');
             font-weight: normal;
             font-style: normal;
-        }
+        }*/
         .renglon{
             margin: 0px; padding: 0px;
             font-size: 1rem;
             display: block;
-            height: 19px;
+            height: 9px;
         }
         .renglon.maker{
             font-size: 1.5rem;
             height: 15px;
-                width: 220%;
+            width: 220%;
         }
         .singlechar{
-            width: 18px;
-            height: 20px;
+            width: 9px;
+            height: 10px;
             display: inline-block;
-            background-size: 18px 20px;
+            background-size: 9px 10px;
         }
         .charA{background-image: url("../src/files/letras/A.jpg");}
         .charB{background-image: url("../src/files/letras/B.jpg");}
@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         .renglon.maker span
         {
             font-family:'Conv_rm_typerighter_medium',Sans-Serif;
-            font-size: 1.5rem;
+            font-size: 12px;
             width: 20px;
         }
         h3{
